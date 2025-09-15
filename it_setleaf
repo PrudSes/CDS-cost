@@ -1,0 +1,11 @@
+@AbapCatalog.sqlViewName: 'ZICOSTCNTRSET'
+@AbapCatalog.compiler.compareMode: 'NORMAL'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Cost Center Set Data'
+define view ZI_CostCenterSet as select from SETLEAF as SetLeaf
+{
+    key SetLeaf.Subclass,
+    key SetLeaf.SetID,
+    SetLeaf.SetRangeFromValue,
+    SetLeaf.SetRangeToValue
+}
