@@ -1,0 +1,34 @@
+@AbapCatalog.sqlViewName: 'ZCCONSUMPTION'
+@AbapCatalog.compiler.compareMode: 'NORMAL'
+@EndUserText.label: 'Cost Center Report'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@ObjectModel.usageType.serviceQuality: #C1
+@ObjectModel.usageType.sizeCategory: #S
+@ObjectModel.usageType.dataClass: #MASTER
+define view ZC_CostCenterReport with parameters
+{
+  @EndUserText.label: 'Controlling Area'
+  p_ControllingArea : abap.char(4),
+  @EndUserText.label: 'Set ID'
+  p_SetID           : abap.char(10),
+  @EndUserText.label: 'Validity Date'
+  p_ValidityDate    : abap.dats
+}
+as select from ZI_CostCenterMaster as Master
+association [0..*] to ZI_CostCenterSet as _Set on Master.CostCenter between _Set.SetRangeFromValue and _Set.SetRangeToValue
+association [0..*] to ZI_CostCenterHierarchy as _Hierarchy on Master.ControllingArea = _Hierarchy.ControllingArea and Master.CostCenter = _Hierarchy.CostCenter
+{
+  key Master.ControllingArea,
+  key Master.CostCenter,
+      Master.CostCenterName,
+      Master.CompanyCode,
+      Master.ValidityStartDate,
+      Master.ValidityEndDate,
+      _Set,
+      _Hierarchy
+}
+where
+      Master.ControllingArea = $parameters.p_ControllingArea
+  and Master.ValidityStartDate <= $parameters.p_ValidityDate
+  and Master.ValidityEndDate >= $parameters.p_ValidityDate
+  and _Set.SetID = $parameters.p_SetID
