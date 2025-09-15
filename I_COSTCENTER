@@ -1,0 +1,14 @@
+@AbapCatalog.sqlViewName: 'ZICOSTCNTRMASTER'
+@AbapCatalog.compiler.compareMode: 'NORMAL'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Cost Center Master Data'
+define view ZI_CostCenterMaster as select from I_CostCenter as CostCenter
+association [0..1] to I_CostCenterText as _Text on $projection.ControllingArea = _Text.ControllingArea and $projection.CostCenter = _Text.CostCenter and _Text.Language = $session.systemLanguage
+{
+    key CostCenter.ControllingArea,
+    key CostCenter.CostCenter,
+    CostCenter.ValidityStartDate,
+    CostCenter.ValidityEndDate,
+    CostCenter.CompanyCode,
+    _Text.CostCenterName
+}
