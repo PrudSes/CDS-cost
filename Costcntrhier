@@ -1,0 +1,25 @@
+@AbapCatalog.sqlViewName: 'ZICOSTCNTRHIER'
+@AbapCatalog.compiler.compareMode: 'NORMAL'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Cost Center Hierarchy'
+@ObjectModel.dataCategory: #HIERARCHY
+@ObjectModel.resultSet.sizeCategory: #S
+define view ZI_CostCenterHierarchy as select from I_CostCenterHierarchyNode as Node
+{
+    key Node.ControllingArea,
+    key Node.HierarchyID,
+    key Node.HierarchyVersion,
+    key Node.HierarchyNode,
+    
+    @hierarchy.parent: 'ParentHierarchyNode'
+    Node.ParentHierarchyNode,
+
+    @hierarchy.child: 'HierarchyNode'
+    Node.HierarchyNode,
+
+    _CostCenter.CostCenter,
+    _CostCenter.ValidityStartDate,
+    _CostCenter.ValidityEndDate,
+    _CostCenter.CompanyCode,
+    _CostCenterText.CostCenterName
+}
